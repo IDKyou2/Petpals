@@ -1,0 +1,346 @@
+/* AdminViewUnclaimedDogs.module.css */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap");
+
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  position: relative;
+}
+
+.logo {
+  height: 50px;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.menuButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.menuIcon {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: #333;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.menuIcon::before,
+.menuIcon::after {
+  content: "";
+  position: absolute;
+  width: 25px;
+  height: 3px;
+  background: #333;
+  transition: all 0.3s ease;
+}
+
+.menuIcon::before {
+  top: -8px;
+}
+
+.menuIcon::after {
+  bottom: -8px;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 1000;
+  width: 200px;
+}
+
+.dropdownMenu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdownMenu li {
+  padding: 10px 20px;
+  cursor: pointer;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.dropdownMenu li:hover {
+  background: #f5f5f5;
+  border-radius: 5px;
+}
+
+.mainContent {
+  padding: 20px 0;
+}
+
+.titleHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 15px;
+}
+
+.backButton {
+  background: #4a90e2;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  transition: transform 0.3s ease;
+  border-radius: 50%;
+}
+
+.backButton:hover {
+  transform: scale(1.1);
+}
+
+.backIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.mainTitle {
+  font-size: 28px;
+  color: #333;
+  font-weight: 600;
+  margin: 0;
+}
+
+.dogsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.dogCard {
+  background: #fff;
+  border-radius: 15px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.dogCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.dogPic {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+  border: 2px solid #ff6b6b; /* Red border to indicate "unclaimed" */
+}
+
+.dogInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dogName {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+}
+
+.petId {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.postType {
+  margin: 0;
+  font-size: 14px;
+  color: #ff6b6b; /* Red to match "unclaimed" theme */
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.viewButton {
+  background: #4a90e2;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.viewButton:hover {
+  background: #357abd;
+  transform: translateY(-2px);
+}
+
+.restoreButton {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.restoreButton:hover {
+  background: #ee5252;
+  transform: translateY(-2px);
+}
+
+.noDogs {
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+  padding: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .container {
+    max-width: 900px;
+  }
+
+  .dogsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    margin: 15px;
+    padding: 15px;
+  }
+
+  .mainTitle {
+    font-size: 24px;
+  }
+
+  .dogsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .dogCard {
+    padding: 12px;
+  }
+
+  .dogPic {
+    width: 50px;
+    height: 50px;
+  }
+
+  .dogName {
+    font-size: 16px;
+  }
+
+  .petId,
+  .postType {
+    font-size: 12px;
+  }
+
+  .viewButton,
+  .restoreButton {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin: 10px;
+    padding: 10px;
+  }
+
+  .logo {
+    height: 40px;
+  }
+
+  .mainTitle {
+    font-size: 20px;
+  }
+
+  .titleHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .backButton {
+    order: -1;
+  }
+
+  .dogCard {
+    padding: 10px;
+  }
+
+  .dogPic {
+    width: 40px;
+    height: 40px;
+  }
+
+  .dogName {
+    font-size: 14px;
+  }
+
+  .petId,
+  .postType {
+    font-size: 11px;
+  }
+
+  .viewButton,
+  .restoreButton {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .dropdownMenu {
+    width: 160px;
+  }
+}
