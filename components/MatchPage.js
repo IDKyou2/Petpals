@@ -393,7 +393,7 @@ const MatchPage = ({
       setTimeout(() => {
         setSelectedNewMatch(selectedNewMatch);
         setIsNewMatchModalOpen(true);
-      }, 4000);
+      }, 4000);                     // -------------------------------------------------- Modal popup timer -------------------------------------------------
     }
   };
 
@@ -439,7 +439,7 @@ const MatchPage = ({
             )
           );
           setTimeout(() => closeNewMatchModal(), 3000);
-          setSuccessMessage("Dogs reunited successfully! Wait for seconds...");
+          setSuccessMessage("Dog reunited successfully! Kindly wait for the page to reload.");
           setTimeout(() => {
             setSuccessMessage(null);
             onNavigateToSuggestionsForm?.();
@@ -806,7 +806,7 @@ const MatchPage = ({
         <View style={styles.confirmationModalOverlay}>
           <View style={styles.confirmationModalContent}>
             <Text style={styles.confirmationModalTitle}>
-              Have you reunited with your dog?
+              Have you already reunited with your dog?
             </Text>
             <View style={styles.confirmationModalButtons}>
               <TouchableOpacity
@@ -816,7 +816,7 @@ const MatchPage = ({
                 <Text style={styles.confirmationModalButtonText}>Yes, we did</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={styles.confirmationModalButton}
+                style={styles.confirmationModalButtonClose}
                 onPress={() => confirmReunion(false)}
               >
                 <Text style={styles.confirmationModalButtonText}>No, not yet</Text>
@@ -1002,7 +1002,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     color: "#6B4E31",
-    marginBottom: 5,
+    //marginBottom: 5,
     backgroundColor: "#F9F9F9",
     padding: 5,
     borderRadius: 5,
@@ -1020,14 +1020,14 @@ const styles = StyleSheet.create({
   cardSubtitle: {
     fontSize: 16,
     color: "#6B4E31",
-    marginBottom: 5,
+    //marginBottom: 5,
     textTransform: "capitalize",
     fontFamily: "Roboto",
   },
   cardLocation: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 5,
+    //marginBottom: 5,
   },
   locationIcon: {
     width: 16,
@@ -1040,19 +1040,19 @@ const styles = StyleSheet.create({
     color: "#6B4E31",
     flexShrink: 1,
     fontFamily: "Roboto",
-    textTransform: "capitalize",
+    //textTransform: "capitalize",
   },
   cardTimestamp: {
     fontSize: 12,
     color: "#6B4E31",
-    marginBottom: 5,
+    //marginBottom: 5,
     fontFamily: "Roboto",
   },
   cardCategory: {
     fontSize: 14,
     color: "#6B4E31",
-    marginBottom: 10,
-    fontWeight: "600",
+    //marginBottom: 10,
+    //fontWeight: "600",
     fontFamily: "Roboto",
   },
   matchMessageContainer: {
@@ -1283,7 +1283,39 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 2,
     borderColor: "#FFD700",
-    margin: 5,    
+    margin: 5,
+  },
+  confirmationModalButton: {
+    backgroundColor: "#FFD700",
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
+    margin: 5,
+  },
+  confirmationModalButtonClose: {
+    //backgroundColor: "#FFD700",
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 8,
+    //shadowColor: "#000",
+    //shadowOffset: { width: 0, height: 2 },
+    //shadowOpacity: 0.2,
+    //shadowRadius: 3,
+    //elevation: 3,
+    margin: 5,
+    borderColor: "#FFD700",
+    borderWidth: 2,
+  },
+  confirmationModalButtonText: {
+    color: "#6B4E31",
+    fontSize: 16,
+    fontWeight: "bold",
+    fontFamily: "Roboto",
   },
 
   newMatchModalButtonText: {
@@ -1332,24 +1364,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
   },
-  confirmationModalButton: {
-    backgroundColor: "#FFD700",
-    paddingVertical: 12,
-    paddingHorizontal: 25,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 3,
-    margin: 5,
-  },
-  confirmationModalButtonText: {
-    color: "#6B4E31",
-    fontSize: 16,
-    fontWeight: "bold",
-    fontFamily: "Roboto",
-  },
+
   successMessageContainer: {
     position: "absolute",
     top: "50%",

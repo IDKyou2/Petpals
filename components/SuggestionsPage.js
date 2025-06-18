@@ -112,20 +112,17 @@ const SuggestionsPage = ({
   const handleMessageClick = () => onNavigateToChatForum?.();
   const handleNotificationClick = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
   const handleSubmitSuggestion = async () => {
     if (!suggestionText.trim()) {
       setSuccessMessage("Please enter a suggestion.");
       setTimeout(() => setSuccessMessage(null), 3000);
       return;
     }
-
     if (rating === 0) {
       setSuccessMessage("Please select a rating.");
       setTimeout(() => setSuccessMessage(null), 3000);
       return;
     }
-
     setIsSubmitting(true);
     try {
       const token = await AsyncStorage.getItem("token");
@@ -135,7 +132,6 @@ const SuggestionsPage = ({
         setIsSubmitting(false);
         return;
       }
-
       const response = await axios.post(
         SUGGESTIONS_API_URL,
         {
@@ -146,7 +142,6 @@ const SuggestionsPage = ({
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
       if (response.status === 200) {
         setSuggestionText("");
         setRating(0);
@@ -261,16 +256,6 @@ const SuggestionsPage = ({
         </View>
 
         <View style={styles.suggestionInputWrapper}>
-          <TextInput
-            style={styles.suggestionInput}
-            placeholder="Comment suggestions here."
-            placeholderTextColor="#666"
-            value={suggestionText}
-            onChangeText={setSuggestionText}
-            multiline
-            maxLength={200}
-          />
-
           {successMessage && (
             <Text
               style={[
@@ -285,6 +270,15 @@ const SuggestionsPage = ({
               {successMessage}
             </Text>
           )}
+          <TextInput
+            style={styles.suggestionInput}
+            placeholder="Comment suggestions here."
+            placeholderTextColor="#666"
+            value={suggestionText}
+            onChangeText={setSuggestionText}
+            multiline
+            maxLength={200}
+          />
           {/* Submit Button */}
           <TouchableOpacity
             style={[
@@ -496,7 +490,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 10,
   },
   ratingLabel: {
     fontSize: 16,
@@ -541,6 +534,7 @@ const styles = StyleSheet.create({
     color: '#006600',
     textAlign: 'center',
     marginTop: 0,
+    marginBottom: 10,
     fontFamily: 'Roboto',
   },
   errorMessage: {

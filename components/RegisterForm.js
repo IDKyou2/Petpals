@@ -82,6 +82,12 @@ const RegisterForm = ({ onLoginClick }) => {
     const isValidEmail = validDomains.some((domain) =>
       email.toLowerCase().endsWith(domain)
     );
+    // Contact number validation
+    const isValidPHNumber = (number) => {
+      const regex = /^09\d{9}$/;
+      return regex.test(number);
+    };
+
 
     // Basic validation
     if (
@@ -96,8 +102,14 @@ const RegisterForm = ({ onLoginClick }) => {
       setLoading(false);
       return;
     }
+
     if (!isValidEmail) {
       setError("Email must be from yahoo.com, gmail.com, or hotmail.com.");
+      setLoading(false);
+      return;
+    }
+    if (!isValidPHNumber(contact)) {
+      setError("Please enter a valid number.");
       setLoading(false);
       return;
     }
@@ -281,7 +293,6 @@ const RegisterForm = ({ onLoginClick }) => {
                 <Text style={styles.registerButtonText}>Register now</Text>
               )}
             </TouchableOpacity>
-
             {success && <Text style={styles.successMessage}>{success}</Text>}
             {error && <Text style={styles.errorMessage}>{error}</Text>}
           </View>

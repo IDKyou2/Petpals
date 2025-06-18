@@ -88,16 +88,15 @@ const LoginPage = ({ onSignUpClick, onLoginSuccess, navigateToAdminDashBoard }) 
       }
     } catch (error) {
       let errorMsg = "Login failed. Please try again.";
-
       if (error.response) {
         errorMsg = error.response.data.message || errorMsg;
         if (error.response.status === 401) {
-          Alert.alert("Login Error", error.response.data.message);
+          //Alert.alert("Login Error", error.response.data.message);
           console.log("Login Error:", error.response.data.message);
-          setErrorMessage("Incorrect username or password. Please try again.");
+          setErrorMessage(errorMsg);
         } else if (error.response.status === 403) {
           Alert.alert("Login Error", error.response.data.message);
-          setErrorMessage(errorMsg);
+          setErrorMessage("Account banned.");
         } else {
           setErrorMessage(errorMsg);
         }

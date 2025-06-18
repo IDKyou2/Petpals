@@ -36,9 +36,9 @@ const FoundDogFormConfirmation = ({
   const submissionIdRef = useRef(null);
 
   const [editBreed, setEditBreed] = useState(formData?.breed || "Unknown");
-  const [editSize, setEditSize] = useState(formData?.size || "Medium");
+  const [editSize, setEditSize] = useState(formData?.size || "Unknown");
   const [editDetails, setEditDetails] = useState(
-    formData?.details || "No additional details provided."
+    formData?.details || ""
   );
   const [editGender, setEditGender] = useState(formData?.gender || "Unknown");
   const [editLocation, setEditLocation] = useState(
@@ -125,7 +125,7 @@ const FoundDogFormConfirmation = ({
     console.log("Updated data:", {
       breed: capitalizeFirstLetter(editBreed),
       size: capitalizeFirstLetter(editSize),
-      details: capitalizeFirstLetter(editDetails),
+      details: editDetails || "No additional details provided.",
       gender: capitalizeFirstLetter(editGender),
       location: capitalizeFirstLetter(editLocation),
     });
@@ -372,7 +372,7 @@ const FoundDogFormConfirmation = ({
                 style={styles.input}
                 value={editBreed}
                 onChangeText={setEditBreed}
-                placeholder="Breed"
+                placeholder="Breed (Common breeds: Aspin, Shi Tzu, etc.)"
                 placeholderTextColor="#999"
               />
             ) : (
@@ -394,12 +394,12 @@ const FoundDogFormConfirmation = ({
                 style={styles.input}
                 value={editLocation}
                 onChangeText={setEditLocation}
-                placeholder="Location"
+                placeholder="Dog's last found location"
                 placeholderTextColor="#999"
               />
             ) : (
               <View style={styles.locationContainer}>
-                <Text style={styles.dogInfo}>Location: {editLocation}</Text>
+                <Text style={styles.dogInfo}>Found at:{" "}{editLocation}</Text>
               </View>
             )}
             {isEditing ? (
@@ -407,17 +407,21 @@ const FoundDogFormConfirmation = ({
                 style={[styles.input, styles.detailsInput]}
                 value={editDetails}
                 onChangeText={setEditDetails}
-                placeholder="Additional details"
-                placeholderTextColor="#999"
+                placeholder="Additional details (optional)"
+                placeholderTextColor="#A9A9A9"
                 multiline
                 numberOfLines={3}
               />
             ) : (
-              <Text style={styles.dogDescription}>
-                {editDetails || "No additional details provided."}
+              <Text style={styles.dogInfo}>
+                Additional details:{"\n"}
+                {editDetails.trim() ? (
+                  editDetails
+                ) : (
+                  <Text style={styles.placeholderText}>No additional details provided.</Text>
+                )}
               </Text>
             )}
-
           </View>
 
           {isEditing && (
@@ -680,22 +684,14 @@ const styles = StyleSheet.create({
   dogInfo: {
     fontSize: 16,
     color: '#6B4E31',
-    marginBottom: 8,
+    marginBottom: 5,
     textAlign: 'left',
     fontFamily: 'Roboto',
   },
-  dogDescription: {
-    fontSize: 16,
-    color: '#6B4E31',
-    marginBottom: 10,
-    textAlign: 'center',
-    fontFamily: 'Roboto',
-  },
-
   locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    //marginBottom: 10,
   },
   input: {
     backgroundColor: '#F9F9F9',
@@ -709,7 +705,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
   },
   detailsInput: {
-    height: 100,
+    height: 80,
     textAlignVertical: 'top',
   },
   genderContainer: {
@@ -853,6 +849,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     fontFamily: 'Roboto',
+  },
+  placeholderText: {
+    color: "#888", // Lighter color to show it's a placeholder
+    fontStyle: "italic",
   },
 });
 

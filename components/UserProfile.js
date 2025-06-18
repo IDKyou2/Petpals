@@ -9,6 +9,7 @@ import {
   TextInput,
   ScrollView,
   Platform,
+  Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -33,6 +34,8 @@ const UserProfile = ({ onNavigateToHome, onLogout, onNavigateToChatForum }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const newChatsCount = useChatCount();
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   useEffect(() => {
     const fetchUserDataAndPostsCount = async () => {
@@ -171,11 +174,31 @@ const UserProfile = ({ onNavigateToHome, onLogout, onNavigateToChatForum }) => {
           },
         }
       );
-
       if (response.status === 200) {
-        setUserData({ ...userData, contact: newContact });
-        setIsEditing(false);
-        setConfirmationModalVisible(false);
+        // Contact number validation
+        const isValidPHNumber = (number) => {
+          const regex = /^09\d{9}$/;
+          return regex.test(number);
+        };
+
+        if (!isValidPHNumber(newContact)) {
+          setError("Please enter a valid contact number.");
+          setConfirmationModalVisible(false);
+          return;
+          //Alert.alert("Error", "Please enter a valid contact number\n(eg. 09XXXXXXXXX).");
+          //setIsEditing(false);
+          //
+        } else {
+          setUserData({ ...userData, contact: newContact });
+          setIsEditing(false);
+          setConfirmationModalVisible(false);
+          setSuccess("Changes saved successfully!");
+          setTimeout(() => {
+            setSuccess(null);
+          }, 5000); // 5 seconds
+
+        }
+        setError(null);
       }
     } catch (error) {
       console.error("Error updating user profile:", error);
@@ -184,7 +207,7 @@ const UserProfile = ({ onNavigateToHome, onLogout, onNavigateToChatForum }) => {
   const handleCancelChange = () => {
     setConfirmationModalVisible(false);
     setIsEditing(false);
-    setNewContact(userData?.contact || "09106993468");
+    setNewContact(userData?.contact || "Error fetching contact");
   };
 
   return (
@@ -235,9 +258,11 @@ const UserProfile = ({ onNavigateToHome, onLogout, onNavigateToChatForum }) => {
           </Text>
           {isEditing ? (
             <View style={styles.editContainer}>
-              <Text style={styles.nameText}>
+              {/*<Text>Display name: </Text>*/}
+              {/*<Text style={styles.nameText}>
                 {userData?.fullName || ""}
-              </Text>
+              </Text>*/}
+              {error && <Text style={styles.errorMessage}>{error}</Text>}
               <TextInput
                 style={styles.contactInput}
                 value={newContact}
@@ -270,11 +295,22 @@ const UserProfile = ({ onNavigateToHome, onLogout, onNavigateToChatForum }) => {
             </View>
           ) : (
             <View style={styles.profileCard}>
+              {success && (
+                <View style={styles.successContainer}>
+                  <Text style={styles.successMessage}>{success}</Text>
+                </View>
+              )}
+
               <Text style={styles.emailText}>
-                Email: {userData?.email || "juan@example.com"}
+                Full name: {userData?.fullName || "..."}
               </Text>
+              {/*
+              <Text style={styles.emailText}>
+                Email: {userData?.email || "..."}
+              </Text>
+              */}
               <Text style={styles.contactText}>
-                Contact #: {userData?.contact || "09106993468"}
+                Contact #: {userData?.contact || "..."}
               </Text>
               <TouchableOpacity
                 style={styles.editButton}
@@ -372,6 +408,21 @@ const UserProfile = ({ onNavigateToHome, onLogout, onNavigateToChatForum }) => {
 };
 
 const styles = StyleSheet.create({
+  errorMessage: {
+    color: "red",
+    fontSize: 14,
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  successContainer: {
+    alignSelf: 'center',
+  },
+  successMessage: {
+    color: "green",
+    fontSize: 14,
+    textAlign: "center",
+    marginBottom: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
@@ -383,8 +434,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#6B4E31",
     paddingVertical: 20,
     paddingHorizontal: 20,
-    // borderBottomLeftRadius: 20,
-    // borderBottomRightRadius: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -498,7 +547,7 @@ const styles = StyleSheet.create({
   emailText: {
     fontSize: 16,
     color: "#6B4E31",
-    marginBottom: 10,
+    marginBottom: 0,
     fontWeight: "600",
     fontFamily: "Roboto",
   },

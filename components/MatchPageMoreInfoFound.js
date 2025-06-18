@@ -183,7 +183,7 @@ const MatchPageMoreInfoFound = ({
                 style={styles.locationIcon}
               />
               <Text style={styles.location}>
-                <Text style={styles.label}>Location: </Text>
+                <Text style={styles.label}>Found at:{" "}</Text>
                 {dog.location}
               </Text>
             </View>

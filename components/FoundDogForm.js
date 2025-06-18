@@ -41,6 +41,8 @@ const FoundDogForm = ({
   const [breedError, setBreedError] = useState("");
   const [sizeError, setSizeError] = useState("");
   const [locationError, setLocationError] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const delayBlur = useRef(null);
 
   const locationiqKey = "pk.0ee70983b8d94b132991d9b76b73102e";
   const debounceTimeout = useRef(null);
@@ -119,15 +121,12 @@ const FoundDogForm = ({
       clearTimeout(debounceTimeout.current);
     }
   };
-  
 
   const handleSubmit = () => {
-
     const capitalizeFirstLetter = (string) => {
       if (!string) return "";
       return string.charAt(0).toUpperCase() + string.slice(1);
     };
-
     setBreedError("");
     setSizeError("");
     setGenderError("");
@@ -153,6 +152,7 @@ const FoundDogForm = ({
       return;
     }
 
+    /*
     const formData = {
       breed: capitalizeFirstLetter(dogBreed),
       size: capitalizeFirstLetter(dogSize),
@@ -161,8 +161,16 @@ const FoundDogForm = ({
       location: capitalizeFirstLetter(location),
       image: selectedImage,
     };
+    */
+    const formData = {
+      image: selectedImage,
+      breed: capitalizeFirstLetter(dogBreed),
+      size: capitalizeFirstLetter(dogSize),
+      gender: capitalizeFirstLetter(gender),
+      location: capitalizeFirstLetter(location),
+      details: additionalDetails || "",
+    };
     console.log("Form Data:", formData);
-
     if (onNavigateToFoundDogFormConfirmation) {
       onNavigateToFoundDogFormConfirmation(formData);
     }
@@ -225,6 +233,20 @@ const FoundDogForm = ({
     }
   };
 
+  const handleBlur = () => {  // ------------------------------------------------- Close map suggestions container modal ------------------------------------------------ //
+    delayBlur.current = setTimeout(() => {
+      setIsTyping(false);
+    }, 7000); // seconds
+  };
+
+  const handleFocus = () => {
+    if (delayBlur.current) {
+      clearTimeout(delayBlur.current);
+      delayBlur.current = null;
+    }
+    setIsTyping(true);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -268,17 +290,6 @@ const FoundDogForm = ({
           </View>
         </TouchableOpacity>
       </Modal>
-
-      <View style={styles.navBar}>
-        <TouchableOpacity
-          style={styles.navButton}
-          onPress={() => handleTabClick("HomePageLostDog")}
-        ></TouchableOpacity>
-        <TouchableOpacity
-          style={styles.navButton}
-          onPress={() => handleTabClick("HomePageFoundDog")}
-        ></TouchableOpacity>
-      </View>
 
       <View style={styles.formWrapper}>
         <ScrollView contentContainerStyle={styles.formContainer}>
@@ -331,15 +342,28 @@ const FoundDogForm = ({
             }}
           />
           {sizeError ? <Text style={styles.errorText}>{sizeError}</Text> : null}
-          <Text style={styles.label}>Additional details:</Text>
-          <TextInput
-            style={styles.inputDetails}
-            placeholder="Enter addtional details (this is optional)."
-            value={additionalDetails}
-            onChangeText={setAdditionalDetails}
-            multiline
-            numberOfLines={4}
-          />
+          <Text style={styles.label}>Location:{" "}<Text style={styles.textHints}>(Last found)</Text></Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={[styles.input,]}
+              placeholder="Enter dog's last found location"
+              value={location}
+              onChangeText={handleLocationChange}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+            />
+            {location.length > 0 && (
+              <TouchableOpacity
+                style={styles.clearButton}
+                onPress={() => handleLocationChange('')}
+              >
+                <Text style={styles.clearButtonTextIcon}>✕</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          {locationError ? (
+            <Text style={styles.errorText}>{locationError}</Text>
+          ) : null}
 
           <Text style={styles.label}>Gender:</Text>
           <View style={styles.genderContainer}>
@@ -387,37 +411,50 @@ const FoundDogForm = ({
           {genderError ? (
             <Text style={styles.errorText}>{genderError}</Text>
           ) : null}
-          <Text style={styles.label}>Location:</Text>
-          <View style={styles.locationInputContainer}>
+
+          <Text style={styles.label}>Additional details:</Text>
+          <View style={styles.inputContainer}>
             <TextInput
-              style={[styles.input, styles.locationInput]}
-              placeholder="Enter dog's last found location"
-              value={location}
-              onChangeText={handleLocationChange}
+              style={styles.input}
+              placeholder="Enter addtional details (this is optional)."
+              value={additionalDetails}
+              onChangeText={setAdditionalDetails}
+              multiline
+              numberOfLines={4}
             />
-            {location.length > 0 && (
+            {additionalDetails.length > 0 && (
               <TouchableOpacity
                 style={styles.clearButton}
-                onPress={() => handleLocationChange('')}
+                onPress={() => setAdditionalDetails("")} // clear the input
               >
                 <Text style={styles.clearButtonTextIcon}>✕</Text>
               </TouchableOpacity>
             )}
           </View>
-          {locationError ? (
-            <Text style={styles.errorText}>{locationError}</Text>
-          ) : null}
           <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
             <Text style={styles.submitButtonText}>SUBMIT</Text>
           </TouchableOpacity>
           <View style={{ marginTop: 5 }} />
         </ScrollView>
-        {location.length > 0 && suggestions.length > 0 && (
-          <View style={styles.suggestionsContainer}>
+        {isTyping && location.length > 0 && suggestions.length > 0 && (
+          <View style={styles.locationSuggestionContainer}>
             <Text style={styles.suggestionTextTitle}>Choose location:</Text>
+            {/* 
             <FlatList
               data={suggestions}
               keyExtractor={(item) => item.data.osm_id.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.suggestionItem}
+                  onPress={() => handleSuggestionSelect(item)}
+                >
+                  <Text style={styles.suggestionText}>{item.value}</Text>
+                </TouchableOpacity>
+              )}
+            />*/}
+            <FlatList
+              data={suggestions}
+              keyExtractor={(item, index) => `${item.data.osm_id}-${index}`}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={styles.suggestionItem}
@@ -521,20 +558,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     marginBottom: 10,
   },
-  navBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: '#FFF',
-    paddingVertical: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-  navButton: {
-    paddingHorizontal: 5,
-  },
   formWrapper: {
     flex: 1,
     position: 'relative',
@@ -546,7 +569,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F5F5',
   },
   imageUploadContainer: {
-    marginBottom: 20,
+    //marginBottom: 20,
     alignItems: 'center',
     // backgroundColor: '#FFF',
     borderRadius: 15,
@@ -568,6 +591,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#FFD700',
     borderRadius: 10,
+    //marginBottom: 5,
   },
   selectedImageIcon: {
     width: 200,
@@ -592,22 +616,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: '#F9F9F9',
     fontFamily: 'Roboto',
-    textTransform: 'capitalize',
-  },
-  inputDetails: {
-    borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.1)',
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 10,
-    fontSize: 16,
-    backgroundColor: '#F9F9F9',
-    fontFamily: 'Roboto',
-  },
-  locationInput: {
     flex: 1,
     paddingRight: 40,
-    textTransform: 'capitalize',
   },
   clearButton: {
     position: 'absolute',
@@ -665,26 +675,22 @@ const styles = StyleSheet.create({
     color: '#6B4E31',
     fontFamily: 'Roboto',
   },
-  genderTextSelected: {
-    color: '#6B4E31',
-    fontWeight: 'bold',
-  },
-  locationInputContainer: {
+  inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
     flex: 1,
   },
-  suggestionsContainer: {
+  locationSuggestionContainer: {
     position: 'absolute',
-    top: 360,
+    top: 20,
     left: 20,
     right: 20,
     backgroundColor: '#FFF',
     borderRadius: 10,
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.1)',
-    maxHeight: 180,
+    maxHeight: 275,
     zIndex: 1000,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -698,7 +704,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 0, 0, 0.1)',
-    color: '#6B4E31',
+    //color: '#6B4E31',
     fontFamily: 'Roboto',
     fontWeight: '600',
   },

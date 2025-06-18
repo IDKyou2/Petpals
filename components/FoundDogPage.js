@@ -248,7 +248,7 @@ const FoundDogPage = ({
                     style={styles.locationIcon}
                   /> */}
                   <Text style={styles.cardLocationText}>
-                    Found at: {dog.location}
+                    Found at:{" "}{dog.location}
                   </Text>
                 </View>
                 <Text style={styles.cardTimestamp}>
@@ -456,7 +456,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: '#6B4E31',
-    marginBottom: 5,
+    //marginBottom: 5,
     backgroundColor: '#F9F9F9',
     padding: 5,
     borderRadius: 5,
@@ -466,14 +466,14 @@ const styles = StyleSheet.create({
   cardSubtitle: {
     fontSize: 16,
     color: '#6B4E31',
-    marginBottom: 5,
+    //marginBottom: 5,
     textTransform: 'capitalize',
     fontFamily: 'Roboto',
   },
   cardLocation: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 5,
+    //marginBottom: 5,
   },
   locationIcon: {
     width: 16,
@@ -486,12 +486,12 @@ const styles = StyleSheet.create({
     color: '#6B4E31',
     flexShrink: 1,
     fontFamily: 'Roboto',
-    textTransform: 'capitalize',
+    //textTransform: 'capitalize',
   },
   cardTimestamp: {
     fontSize: 13,
     color: '#6B4E31',
-    marginBottom: 5,
+    //marginBottom: 5,
     fontFamily: 'Roboto',
   },
   cardCategory: {
@@ -507,7 +507,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     // backgroundColor: '#FFD700',
-    padding: 5,
+    //padding: 5,
     borderRadius: 5,
     alignSelf: 'flex-start',
     fontFamily: 'Roboto',

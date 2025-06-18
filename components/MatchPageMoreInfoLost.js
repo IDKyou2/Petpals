@@ -190,7 +190,7 @@ const MatchPageMoreInfoLost = ({
                 style={styles.locationIcon}
               />
               <Text style={styles.locationContainer}>
-                <Text style={styles.label}>Location: </Text>
+                <Text style={styles.label}>Last seen at:{" "}</Text>
                 {dog.location}
               </Text>
             </View>

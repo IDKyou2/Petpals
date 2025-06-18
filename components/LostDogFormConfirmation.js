@@ -34,16 +34,15 @@ const LostDogFormConfirmation = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const submissionIdRef = useRef(null);
-
   const [editName, setEditName] = useState(formData?.name || "");
   const [editBreed, setEditBreed] = useState(formData?.breed || "");
   const [editSize, setEditSize] = useState(formData?.size || "");
   const [editDetails, setEditDetails] = useState(
-    formData?.details || "No additional details provided."
+    formData?.details || ""
   );
   const [editGender, setEditGender] = useState(formData?.gender || "");
   const [editLocation, setEditLocation] = useState(
-    formData?.location || "Unknown"
+    formData?.location || ""
   );
   const [image, setImage] = useState(formData?.image || null);
   const newChatsCount = useChatCount();
@@ -121,6 +120,7 @@ const LostDogFormConfirmation = ({
       if (!string) return "";
       return string.charAt(0).toUpperCase() + string.slice(1);
     };
+
     const fields = [editName, editBreed, editSize, editGender, editLocation];
 
     if (fields.every(field => field)) {
@@ -129,12 +129,12 @@ const LostDogFormConfirmation = ({
         name: capitalizeFirstLetter(editName),
         breed: capitalizeFirstLetter(editBreed),
         size: capitalizeFirstLetter(editSize),
-        details: capitalizeFirstLetter(editDetails),
+        details: editDetails || "No additional details provided.",
         gender: capitalizeFirstLetter(editGender),
         location: capitalizeFirstLetter(editLocation),
       });
     } else {
-      Alert.alert("Error", "There was an error saving your details. Please ensure that all fields are filled out correctly.");
+      Alert.alert("An error occurred while saving.", "There was an error saving your changes. Please ensure that all fields are filled out correctly.");
       console.warn("Error: There was an error saving your details. Please ensure that all fields are filled out correctly.");
     }
   };
@@ -312,7 +312,7 @@ const LostDogFormConfirmation = ({
           <View style={styles.profileHeader}>
             <Text style={styles.profileTitle}>Details</Text>
           </View>
-        
+
 
           <Image
             source={
@@ -402,7 +402,7 @@ const LostDogFormConfirmation = ({
               />
             ) : (
               <View style={styles.locationContainer}>
-                <Text style={styles.dogInfo}>Location: {editLocation}</Text>
+                <Text style={styles.dogInfo}>Last seen at: {editLocation}</Text>
               </View>
             )}
             {isEditing ? (
@@ -410,17 +410,21 @@ const LostDogFormConfirmation = ({
                 style={[styles.input, styles.detailsInput]}
                 value={editDetails}
                 onChangeText={setEditDetails}
-                placeholder="Additional details"
+                placeholder="Additional details (optional)"
                 placeholderTextColor="#A9A9A9"
                 multiline
                 numberOfLines={3}
               />
             ) : (
-              <Text style={styles.dogDescription}>
-                {editDetails.trim() ? editDetails : "No additional details provided."}
+              <Text style={styles.dogInfo}>
+                Additional details:{"\n"}
+                {editDetails.trim() ? (
+                  editDetails
+                ) : (
+                  <Text style={styles.placeholderText}>No additional details provided.</Text>
+                )}
               </Text>
             )}
-
           </View>
 
           {isEditing && (
@@ -694,22 +698,13 @@ const styles = StyleSheet.create({
   dogInfo: {
     fontSize: 16,
     color: '#6B4E31',
-    marginBottom: 8,
+    marginBottom: 5,
     textAlign: 'left',
-    fontFamily: 'Roboto',
-    textTransform: 'capitalize',
-  },
-  dogDescription: {
-    fontSize: 16,
-    color: '#6B4E31',
-    marginBottom: 10,
-    textAlign: 'center',
     fontFamily: 'Roboto',
   },
   locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    //justifyContent: 'center',
   },
   input: {
     backgroundColor: '#F9F9F9',
@@ -899,6 +894,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Roboto',
   },
+  placeholderText: {
+    color: "#888", // Lighter color to show it's a placeholder
+    fontStyle: "italic",
+  }
 });
 
 export default LostDogFormConfirmation;

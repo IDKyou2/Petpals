@@ -180,11 +180,11 @@ const SuggestionsForm = ({
             style={styles.textArea}
             multiline
             numberOfLines={6}
-            placeholder="Enter your suggestion here (max 500 characters)"
+            placeholder="Enter your suggestion here (max. 500 characters)"
             value={suggestion}
             onChangeText={setSuggestion}
             maxLength={500}
-            placeholderTextColor="#6B4E31"
+            placeholderTextColor="#999999"
           />
           <View style={styles.ratingContainer}>
             <Text style={styles.ratingLabel}>Rating:</Text>
@@ -198,7 +198,7 @@ const SuggestionsForm = ({
             onPress={handleSubmit}
             disabled={!suggestion || !rating}
           >
-            <Text style={styles.submitButtonText}>Submit Suggestion</Text>
+            <Text style={styles.submitButtonText}>Submit</Text>
           </TouchableOpacity>
           {submitStatus && (
             <Text style={styles.submitStatus}>{submitStatus}</Text>

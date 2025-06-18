@@ -185,7 +185,7 @@ const LostDogPageViewInfo = ({
                 style={styles.bulletIcon}
               />
               <Text style={styles.location}>
-                <Text style={styles.label}>Location: </Text>
+                <Text style={styles.label}>Last seen at: </Text>
                 {dog.location}
               </Text>
             </View>

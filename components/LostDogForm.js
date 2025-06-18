@@ -30,7 +30,7 @@ const LostDogForm = ({
   const [dogName, setDogName] = useState("");
   const [dogBreed, setDogBreed] = useState("");
   const [dogSize, setDogSize] = useState("");
-  const [otherDetails, setAdditionalDetails] = useState("");
+  const [additionalDetails, setAdditionalDetails] = useState("");
   const [gender, setGender] = useState("");
   const [location, setLocation] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -44,6 +44,8 @@ const LostDogForm = ({
   const [locationError, setLocationError] = useState("");
   const [imageError, setImageError] = useState("");
   const newChatsCount = useChatCount();
+  const [isTyping, setIsTyping] = useState(false);
+  const delayBlur = useRef(null);
 
   const locationiqKey = "pk.0ee70983b8d94b132991d9b76b73102e";
   const debounceTimeout = useRef(null);
@@ -150,7 +152,7 @@ const LostDogForm = ({
       }
       if (!dogSize) {
         setSizeError("Please enter dog's size.");
-        
+
       }
       if (!gender) {
         setGenderError("Please select dog's gender.");
@@ -161,17 +163,22 @@ const LostDogForm = ({
       return;
     }
 
-    const formData = {
-      name: dogName,
-      breed: dogBreed,
-      size: dogSize,
-      details: otherDetails || "",
-      gender,
-      location,
-      image: selectedImage,
+    const capitalizeFirstLetter = (string) => {
+      if (!string) return "";
+      return string.charAt(0).toUpperCase() + string.slice(1);
     };
 
-    console.log("Form Data:", formData);
+    const formData = {
+      image: selectedImage,
+      name: capitalizeFirstLetter(dogName),
+      breed: capitalizeFirstLetter(dogBreed),
+      size: capitalizeFirstLetter(dogSize),
+      gender: capitalizeFirstLetter(gender),
+      location: capitalizeFirstLetter(location),
+      details: additionalDetails || "",
+    };
+
+    console.log("Partial Form Data:", formData);
 
     if (onNavigateToLostDogFormConfirmation) {
       onNavigateToLostDogFormConfirmation(formData);
@@ -237,6 +244,20 @@ const LostDogForm = ({
       setSelectedImage(result.assets[0]);
       setImageError("");
     }
+  };
+
+  const handleBlur = () => {  // ------------------------------------------------- Close map suggestions container modal ------------------------------------------------ //
+    delayBlur.current = setTimeout(() => {
+      setIsTyping(false);
+    }, 7000); // seconds
+  };
+
+  const handleFocus = () => {
+    if (delayBlur.current) {
+      clearTimeout(delayBlur.current);
+      delayBlur.current = null;
+    }
+    setIsTyping(true);
   };
 
   return (
@@ -355,16 +376,26 @@ const LostDogForm = ({
             }}
           />
           {sizeError ? <Text style={styles.errorText}>{sizeError}</Text> : null}
-
-          <Text style={styles.label}>Additional details:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter addtional details (this is optional)."
-            value={otherDetails}
-            onChangeText={setAdditionalDetails}
-            multiline
-            numberOfLines={4}
-          />
+          <Text style={styles.label}>Location:{" "}<Text style={styles.textHints}>(Last seen)</Text></Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={[styles.input,]}
+              placeholder="Enter dog's last seen location"
+              value={location}
+              onChangeText={handleLocationChange}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+            />
+            {location.length > 0 && (
+              <TouchableOpacity
+                style={styles.clearButton}
+                onPress={() => handleLocationChange('')}
+              >
+                <Text style={styles.clearButtonTextIcon}>✕</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          {locationError ? <Text style={styles.errorText}>{locationError}</Text> : null}
 
           <Text style={styles.label}>Gender:</Text>
           <View style={styles.genderContainer}>
@@ -403,36 +434,49 @@ const LostDogForm = ({
           </View>
           {genderError ? <Text style={styles.errorText}>{genderError}</Text> : null}
 
-          <Text style={styles.label}>Location:</Text>
-          <View style={styles.locationInputContainer}>
+          <Text style={styles.label}>Additional details:</Text>
+          <View style={styles.inputContainer}>
             <TextInput
-              style={[styles.input, styles.locationInput]}
-              placeholder="Enter dog's last seen location"
-              value={location}
-              onChangeText={handleLocationChange}
+              style={[styles.input,]}
+              placeholder="Enter addtional details (this is optional)."
+              value={additionalDetails}
+              onChangeText={setAdditionalDetails}
+              multiline
+              numberOfLines={4}
             />
-            {location.length > 0 && (
+            {additionalDetails.length > 0 && (
               <TouchableOpacity
                 style={styles.clearButton}
-                onPress={() => handleLocationChange('')}
+                onPress={() => setAdditionalDetails("")} // clear the input
               >
-                <Text style={styles.clearButtonText}>✕</Text>
+                <Text style={styles.clearButtonTextIcon}>✕</Text>
               </TouchableOpacity>
             )}
           </View>
-          {locationError ? <Text style={styles.errorText}>{locationError}</Text> : null}
-
           <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
             <Text style={styles.submitButtonText}>SUBMIT</Text>
           </TouchableOpacity>
           <View style={{ marginTop: 5 }} />
         </ScrollView>
-        {location.length > 0 && suggestions.length > 0 && (
-          <View style={styles.suggestionsContainer}>
+        {isTyping && location.length > 0 && suggestions.length > 0 && (
+          /* ----------------------------------------------------------------- Adjust map suggestion container -------------------------------------------------------*/
+          <View style={styles.locationSuggestionContainer}>
             <Text style={styles.suggestionTextTitle}>Choose location:</Text>
-            <FlatList
+            {/* <FlatList
               data={suggestions}
               keyExtractor={(item) => item.data.osm_id.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.suggestionItem}
+                  onPress={() => handleSuggestionSelect(item)}
+                >
+                  <Text style={styles.suggestionText}>{item.value}</Text>
+                </TouchableOpacity>
+              )}
+            />    */}
+            <FlatList
+              data={suggestions}
+              keyExtractor={(item, index) => `${item.data.osm_id}-${index}`}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={styles.suggestionItem}
@@ -532,17 +576,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     marginBottom: 10,
   },
-  navBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: '#red',
-    paddingVertical: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
-  },
   navButton: {
     paddingHorizontal: 5,
   },
@@ -557,7 +590,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   imageUploadContainer: {
-    marginBottom: 20,
+    //marginBottom: 20,
     alignItems: 'center',
     // backgroundColor: '#FFF',
     borderRadius: 15,
@@ -579,6 +612,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#FFD700',
     borderRadius: 10,
+    //marginBottom: 5,
   },
   selectedImageIcon: {
     width: 200,
@@ -603,8 +637,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: '#F9F9F9',
     fontFamily: 'Roboto',
-  },
-  locationInput: {
     flex: 1,
     paddingRight: 40,
   },
@@ -617,11 +649,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  clearButtonText: {
+  clearButtonTextIcon: {
     fontSize: 18,
-    color: '#6B4E31',
+    //color: '#6B4E31',
     fontWeight: 'bold',
     fontFamily: 'Roboto',
+    bottom: 8,
   },
   textHints: {
     fontSize: 14,
@@ -665,22 +698,23 @@ const styles = StyleSheet.create({
     color: '#6B4E31',
     fontFamily: 'Roboto',
   },
-  locationInputContainer: {
+  inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    //marginBottom: 10,
     flex: 1,
   },
-  suggestionsContainer: {
+  locationSuggestionContainer: {
     position: 'absolute',
-    top: 360,
+    //top: 360,
+    top: 20,
     left: 20,
     right: 20,
     backgroundColor: '#FFF',
     borderRadius: 10,
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.1)',
-    maxHeight: 180,
+    maxHeight: 275,
     zIndex: 1000,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -694,7 +728,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 0, 0, 0.1)',
-    color: '#6B4E31',
+    //color: '#6B4E31',
     fontFamily: 'Roboto',
     fontWeight: '600',
   },

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "FinalMobile",
-    "slug": "FinalMobile",
+    "name": "Petpals",
+    "slug": "Petpals",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -16,7 +16,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.newbie000.FinalMobile"
+      "package": "com.newbie000.Petpals"
     },
     "web": {
       "bundler": "metro",
