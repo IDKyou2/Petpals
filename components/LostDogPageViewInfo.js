@@ -13,7 +13,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Define API URL constant
-const BASE_URL = "http://192.168.1.24:5000";
+const BASE_URL = "http://192.168.1.6:5000";
 
 const LostDogPageViewInfo = ({
   dog,
@@ -128,7 +128,7 @@ const LostDogPageViewInfo = ({
         >
           <Image
             source={require("../assets/images/back-arrow.png")}
-            style={styles.arrowbulletIcon}
+            style={styles.arrowIcon}
           />
           <Text style={styles.mainTitle}>View info</Text>
         </TouchableOpacity>
@@ -140,81 +140,69 @@ const LostDogPageViewInfo = ({
             resizeMode="cover"
           />
           <View style={styles.info}>
-            <View style={styles.petIdContainer}>
-
+            <View style={styles.containerRow}>
               <Text style={styles.petId}>Pet ID #: {dog.petId}</Text>
             </View>
-            <View style={styles.nameContainer}>
+            <View style={styles.containerRow}>
               <Image
                 source={require("../assets/images/size.png")}
-                style={styles.bulletIcon}
+                style={styles.bullet}
               />
               <Text style={styles.label}>Name: {dog.name}</Text>
             </View>
-            <View style={styles.categoryContainer}>
+            <View style={styles.containerRow}>
               <Image
                 source={require("../assets/images/size.png")}
-                style={styles.bulletIcon}
+                style={styles.bullet}
               />
               <Text style={styles.label}>Category: {dog.category}</Text>
             </View>
-            <View style={styles.breedContainer}>
+            <View style={styles.containerRow}>
               <Image
                 source={require("../assets/images/size.png")}
-                style={styles.bulletIcon}
+                style={styles.bullet}
               />
-              <Text style={styles.name}>
-                <Text style={styles.label}>Breed: </Text>
-                {dog.breed}
+              <Text>
+                <Text style={styles.label}>Breed: {dog.breed}
+                </Text>
               </Text>
             </View>
-            <View style={styles.genderContainer}>
+            <View style={styles.containerRow}>
               <Image
                 source={require("../assets/images/size.png")}
-                style={styles.bulletIcon}
+                style={styles.bullet}
               />
-              <Text style={styles.details}>
-                <Text style={styles.label}>Gender: </Text>
-                {dog.gender}
-              </Text>
+              <Text style={styles.label}>Gender: {dog.gender}</Text>
             </View>
-            <View style={styles.divider} />
-            <View style={styles.lastSeen}>
+            <View style={styles.containerRow}>
               <Image
                 source={require("../assets/images/size.png")}
-                style={styles.bulletIcon}
+                style={styles.bullet}
               />
-              <Text style={styles.location}>
-                <Text style={styles.label}>Last seen at: </Text>
-                {dog.location}
-              </Text>
+              <Text style={styles.label}>Size: {dog.size}</Text>
             </View>
-            <View style={styles.sizeContainer}>
+            <View style={styles.containerRow}>
               <Image
                 source={require("../assets/images/size.png")}
-                style={styles.bulletIcon}
+                style={styles.bullet}
               />
-              <Text style={styles.size}>
-                <Text style={styles.label}>Size: </Text>
-                {dog.size}
-              </Text>
+              <Text style={styles.label}>Last seen at: {dog.location}</Text>
             </View>
-            <View style={styles.additionalDetailsContainer}>
+
+            <View style={styles.containerRow}>
               <Image
                 source={require("../assets/images/details.png")}
-                style={styles.bulletIcon}
+                style={styles.bullet}
               />
-              <Text style={styles.additionalDetails}>
-                <Text style={styles.label}>Additional details: </Text>
-                {dog.details}
-              </Text>
+              <Text style={styles.label}>Additional details: {dog.details}</Text>
             </View>
-            <View style={styles.postedBy}>
+            <View style={styles.divider} />
+            <View style={styles.userDetailsContainer}>
               <Image
                 source={require("../assets/images/size.png")}
-                style={styles.bulletIcon}
+                style={styles.bullet}
               />
-              <Text style={styles.postedByText}>
+              <Text style={styles.label}>
                 {dog.userId && dog.userId.fullName ? (
                   <>
                     <Text style={styles.label}>Posted by: </Text>
@@ -227,25 +215,44 @@ const LostDogPageViewInfo = ({
                 )}
               </Text>
             </View>
-            <View style={styles.contactContainer}>
+            <View style={styles.userDetailsContainer}>
               <Image
                 source={require("../assets/images/size.png")}
-                style={styles.bulletIcon}
+                style={styles.bullet}
               />
-              {userData && userData.contact && (
+              {userData && userData.contact ? (
                 <Text style={styles.contact}>
                   <Text style={styles.label}>Contact number: </Text>
                   {userData.contact}
-                </Text>
+                </Text>) : (
+                <Text style={styles.errorText}>Contact number unavailable.</Text>
               )}
             </View>
+            <View style={styles.userDetailsContainer}>
+              <Image
+                source={require("../assets/images/size.png")}
+                style={styles.bullet}
+              />
+              {userData && userData.address ? (
+                <Text style={styles.contact}>
+                  <Text style={styles.label}>Address: </Text>
+                  {userData.address}
+                </Text>
+              ) : (
+                <Text style={styles.errorText}>Address unavailable.</Text>
+              )}
+            </View>
+            {/* 
+            <View>
+              <Text>{JSON.stringify(userData)}</Text>
+            </View>
+            */}
           </View>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
   mainWrapper: {
     flex: 1,
@@ -326,7 +333,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
   },
-  arrowbulletIcon: {
+  arrowIcon: {
     width: 24,
     height: 24,
     tintColor: '#FFD700',
@@ -347,7 +354,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 5,
     padding: 20,
-    marginTop: 20,
+    //marginTop: 20,
     alignItems: 'center',
     width: '100%',
     maxWidth: 400,
@@ -375,99 +382,37 @@ const styles = StyleSheet.create({
     color: '#6B4E31',
     fontFamily: 'Roboto',
   },
-  nameContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  name: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#6B4E31',
-    textTransform: 'capitalize',
-    fontFamily: 'Roboto',
-  },
-  categoryContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
-  },
   category: {
     fontSize: 15,
     color: '#6B4E31',
     fontFamily: 'Roboto',
-  },
-  breedContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
-    textTransform: 'capitalize',
   },
   breed: {
     color: '#6B4E31',
     fontFamily: 'Roboto',
     textTransform: 'capitalize',
   },
-  genderContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  details: {
-    fontSize: 15,
-    color: '#6B4E31',
-    fontFamily: 'Roboto',
-  },
   divider: {
     height: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
     marginVertical: 10,
   },
-  lastSeen: {
+  containerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 5,
   },
-
-  location: {
-    fontSize: 15,
-    color: '#6B4E31',
-    fontFamily: 'Roboto',
-    textTransform: 'capitalize',
-  },
-  sizeContainer: {
+  userDetailsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 5,
-
-  },
-  size: {
-    fontSize: 15,
-    color: '#6B4E31',
-    fontFamily: 'Roboto',
-    textTransform: 'capitalize',
-  },
-  contactContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
   },
   contact: {
     fontSize: 15,
     color: '#6B4E31',
     fontFamily: 'Roboto',
   },
-  additionalDetailsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  additionalDetails: {
-    fontSize: 15,
-    color: '#6B4E31',
-    fontFamily: 'Roboto',
-  },
-  postedBy: {
+  /*
+  postedByContainer: {
     padding: 8,
     borderRadius: 10,
     marginLeft: -8,
@@ -475,28 +420,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // backgroundColor: '#F9F9F9',
   },
-  bulletIcon: {
+  */
+  bullet: {
     width: 10,
     height: 10,
     marginRight: 5,
     tintColor: '#6B4E31',
   },
-
   label: {
-    fontWeight: '700',
-    color: '#6B4E31',
-    fontFamily: 'Roboto',
-  },
-  postedByText: {
     fontSize: 15,
+    fontWeight: '700',
     color: '#6B4E31',
     fontFamily: 'Roboto',
   },
   errorText: {
     color: '#FF4D4D',
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: 'Roboto',
   },
 });
-
 export default LostDogPageViewInfo;

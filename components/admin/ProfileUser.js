@@ -4,7 +4,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView, ScrollVi
 const ProfileUserScreen = ({ onNavigateToManageUsersScreen, user }) => {
     const defaultImage = require('../../assets/images/default-user.png');
     const profileImage = user?.profilePic && user.profilePic !== 'Uploads/'
-        ? { uri: `http://192.168.1.24:5000/${user.profilePic}` }
+        ? { uri: `http://192.168.1.6:5000/${user.profilePic}` }
         : defaultImage;
 
     return (
@@ -58,6 +58,10 @@ const ProfileUserScreen = ({ onNavigateToManageUsersScreen, user }) => {
                             <View style={styles.infoContainer}>
                                 <Text style={styles.label}>Email:</Text>
                                 <Text style={styles.value}>{user?.email || 'N/A'}</Text>
+                            </View>
+                            <View style={styles.infoContainer}>
+                                <Text style={styles.label}>Address:</Text>
+                                <Text style={styles.value}>{user?.address || '...'}</Text>
                             </View>
                         </View>
                     </View>

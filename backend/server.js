@@ -29,10 +29,10 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: [
-      "http://192.168.1.24:3000",
-      "http://192.168.1.24:8081",
-      "http://192.168.1.24:8080",
-      "http://192.168.1.24:5000",
+      "http://192.168.1.6:3000",
+      "http://192.168.1.6:8081",
+      "http://192.168.1.6:8080",
+      "http://192.168.1.6:5000",
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
@@ -49,10 +49,10 @@ app.use(fileUpload());
 const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigins = [
-      "http://192.168.1.24:3000",
-      "http://192.168.1.24:8081",
-      "http://192.168.1.24:8080",
-      "http://192.168.1.24:5000",
+      "http://192.168.1.6:3000",
+      "http://192.168.1.6:8081",
+      "http://192.168.1.6:8080",
+      "http://192.168.1.6:5000",
     ];
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
@@ -87,13 +87,17 @@ app.use((req, res, next) => {
 });
 
 const uploadsDir = path.join(__dirname, "../Uploads");
+const picturesDir = path.join(__dirname, "../Uploads/pictures");
 app.use("/Uploads", express.static(uploadsDir), (req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   next();
 });
 
 if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir);
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+if (!fs.existsSync(picturesDir)) {
+  fs.mkdirSync(picturesDir, { recursive: true });
 }
 
 app.use(
@@ -151,7 +155,7 @@ io.on("connection", (socket) => {
             ...msg._doc,
             profilePic: user
               ? user.profilePic
-                ? `/Uploads/${path.basename(user.profilePic)}`
+                ? `/Uploads/pictures/${path.basename(user.profilePic)}`
                 : "/Uploads/default-user.png"
               : "/Uploads/default-user.png",
           };
@@ -192,7 +196,7 @@ io.on("connection", (socket) => {
         ...newMessage._doc,
         profilePic: user
           ? user.profilePic
-            ? `/Uploads/${path.basename(user.profilePic)}`
+            ? `/Uploads/pictures/${path.basename(user.profilePic)}`
             : "/Uploads/default-user.png"
           : "/Uploads/default-user.png",
       };

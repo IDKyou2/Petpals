@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
 
-const API_BASE_URL = "http://192.168.1.24:5000/api/";
+const API_BASE_URL = "http://192.168.1.6:5000/api/";
 
 const FoundDogs = ({ onNavigateToAdminDashBoard, onNavigateToViewFoundDogInfo }) => {
     const [dogs, setDogs] = useState([]);
@@ -15,7 +15,7 @@ const FoundDogs = ({ onNavigateToAdminDashBoard, onNavigateToViewFoundDogInfo })
                 if (response.data && Array.isArray(response.data)) {
                     const fetchedDogs = response.data.map(dog => {
                         const normalizedImagePath = dog.imagePath ? dog.imagePath.replace(/\\/g, '/') : null;
-                        const imageUrl = normalizedImagePath ? `http://192.168.1.24:5000${normalizedImagePath}` : null;
+                        const imageUrl = normalizedImagePath ? `http://192.168.1.6:5000${normalizedImagePath}` : null;
                         console.log(`Dog ${dog._id} - Image Path: ${normalizedImagePath}, Full URL: ${imageUrl}`);
                         return {
                             id: dog._id,

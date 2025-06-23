@@ -19,7 +19,7 @@ import NotificationModal from "./NotificationModal";
 import Footer from "./Footer";
 
 const SERVER_URL =
-  Platform.OS === "android" ? "http://192.168.1.24:5000" : "http://192.168.1.24:5000";
+  Platform.OS === "android" ? "http://192.168.1.6:5000" : "http://192.168.1.6:5000";
 
 const ChatForum = ({
   onNavigateToHome,

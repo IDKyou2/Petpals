@@ -47,7 +47,7 @@ const FoundDogForm = ({
   const locationiqKey = "pk.0ee70983b8d94b132991d9b76b73102e";
   const debounceTimeout = useRef(null);
 
-  const NEW_POSTS_API_URL = "http://192.168.1.24:5000/api/posts/new-posts-count";
+  const NEW_POSTS_API_URL = "http://192.168.1.6:5000/api/posts/new-posts-count";
 
   useEffect(() => {
     const fetchNewPostsCount = async () => {
@@ -236,7 +236,7 @@ const FoundDogForm = ({
   const handleBlur = () => {  // ------------------------------------------------- Close map suggestions container modal ------------------------------------------------ //
     delayBlur.current = setTimeout(() => {
       setIsTyping(false);
-    }, 7000); // seconds
+    }, 3000); // seconds
   };
 
   const handleFocus = () => {
@@ -318,7 +318,7 @@ const FoundDogForm = ({
               <Text style={styles.errorText}>{imageError}</Text>
             ) : null}
           </View>
-          <Text style={styles.label}>Breed: <Text style={styles.textHints}>(Common breeds: Aspin, Shi Tzu, etc.)</Text></Text>
+          <Text style={styles.label}>Breed: <Text style={styles.textHints}>(Common breeds: Aspin, Shi Tzu, Mixed, etc.)</Text></Text>
           <TextInput
             style={styles.input}
             placeholder="Enter dog's breed"
@@ -412,11 +412,11 @@ const FoundDogForm = ({
             <Text style={styles.errorText}>{genderError}</Text>
           ) : null}
 
-          <Text style={styles.label}>Additional details:</Text>
+          <Text style={styles.label}>Additional details: <Text style={styles.textHints}>(Allergies, Color, Reward, etc.)</Text></Text>
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
-              placeholder="Enter addtional details (this is optional)."
+              placeholder="Enter additional details (this is optional)."
               value={additionalDetails}
               onChangeText={setAdditionalDetails}
               multiline

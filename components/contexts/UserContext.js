@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Define API URL constant
-const USER_PROFILE_API_URL = "http://192.168.1.24:5000/api/auth/user/profile";
+const USER_PROFILE_API_URL = "http://192.168.1.6:5000/api/auth/user/profile";
 
 const UserContext = createContext();
 

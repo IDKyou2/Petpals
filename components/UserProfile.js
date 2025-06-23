@@ -20,7 +20,7 @@ import Footer from "./Footer";
 
 // Define API URL constants
 const BASE_URL =
-  Platform.OS === "android" ? "http://192.168.1.24:5000" : "http://192.168.1.24:5000";
+  Platform.OS === "android" ? "http://192.168.1.6:5000" : "http://192.168.1.6:5000";
 const USER_PROFILE_API_URL = `${BASE_URL}/api/auth/user/profile`;
 const NEW_POSTS_API_URL = `${BASE_URL}/api/posts/new-posts-count`;
 
@@ -50,13 +50,13 @@ const UserProfile = ({ onNavigateToHome, onLogout, onNavigateToChatForum }) => {
         const userResponse = await axios.get(USER_PROFILE_API_URL, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
         if (userResponse.status === 200) {
           setUserData({
             fullName: userResponse.data.fullName || "",
             contact: userResponse.data.contact || "",
             email: userResponse.data.email || "",
             profilePic: userResponse.data.profilePic,
+            address: userResponse.data.address, // ---------------- newly added -------------- //
           });
           setNewContact(userResponse.data.contact || "");
 
@@ -300,17 +300,19 @@ const UserProfile = ({ onNavigateToHome, onLogout, onNavigateToChatForum }) => {
                   <Text style={styles.successMessage}>{success}</Text>
                 </View>
               )}
-
-              <Text style={styles.emailText}>
+              <Text style={styles.userDataText}>
                 Full name: {userData?.fullName || "..."}
               </Text>
               {/*
-              <Text style={styles.emailText}>
+              <Text style={styles.userDataText}>
                 Email: {userData?.email || "..."}
               </Text>
               */}
-              <Text style={styles.contactText}>
+              <Text style={styles.userDataText}>
                 Contact #: {userData?.contact || "..."}
+              </Text>
+              <Text style={styles.userDataText}>
+                Address: {userData?.address || "..."}
               </Text>
               <TouchableOpacity
                 style={styles.editButton}
@@ -544,7 +546,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: "100%",
   },
-  emailText: {
+  userDataText: {
     fontSize: 16,
     color: "#6B4E31",
     marginBottom: 0,
@@ -558,13 +560,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "center",
     textTransform: "capitalize",
-    fontFamily: "Roboto",
-  },
-  contactText: {
-    fontSize: 16,
-    color: "#6B4E31",
-    marginBottom: 15,
-    fontWeight: "600",
     fontFamily: "Roboto",
   },
   editButton: {

@@ -17,7 +17,7 @@ import NotificationModal from "./NotificationModal";
 import Footer from "./Footer";
 
 // Define API URL constants
-const BASE_URL = "http://192.168.1.24:5000";
+const BASE_URL = "http://192.168.1.6:5000";
 const NEW_POSTS_API_URL = `${BASE_URL}/api/posts/new-posts-count`;
 const SUGGESTIONS_API_URL = `${BASE_URL}/api/suggestions`;
 

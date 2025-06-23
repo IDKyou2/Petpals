@@ -47,8 +47,8 @@ const FoundDogFormConfirmation = ({
   const [image, setImage] = useState(formData?.image || null);
   const newChatsCount = useChatCount();
 
-  const NEW_POSTS_API_URL = "http://192.168.1.24:5000/api/posts/new-posts-count";
-  const FOUND_DOG_API_URL = "http://192.168.1.24:5000/api/founddog";
+  const NEW_POSTS_API_URL = "http://192.168.1.6:5000/api/posts/new-posts-count";
+  const FOUND_DOG_API_URL = "http://192.168.1.6:5000/api/founddog";
 
   useEffect(() => {
     const fetchNewPostsCount = async () => {
@@ -319,7 +319,6 @@ const FoundDogFormConfirmation = ({
             style={styles.dogImage}
             resizeMode="contain"
           />
-
           <View style={styles.dogDetails}>
             {isEditing ? (
               <View style={styles.genderContainer}>
@@ -507,7 +506,6 @@ const FoundDogFormConfirmation = ({
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -520,11 +518,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#6B4E31',
     paddingVertical: 20,
     paddingHorizontal: 20,
-    // borderBottomLeftRadius: 10,
-    // borderBottomRightRadius: 10,
+    // borderBottomLeftRadius: 20,
+    // borderBottomRightRadius: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.5,
+    shadowOpacity: 0.3,
     shadowRadius: 6,
     elevation: 8,
   },
@@ -572,12 +570,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderRadius: 15,
     padding: 20,
-    width: '80%',
+    width: '85%',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowRadius: 10,
     elevation: 5,
   },
   modalText: {
@@ -589,7 +587,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   disabledButton: {
-    backgroundColor: '#cccccc',
+    backgroundColor: '#CCCCCC',
     opacity: 0.6,
   },
   menuItem: {
@@ -604,8 +602,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
   },
   navBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
     backgroundColor: '#FFF',
     paddingVertical: 10,
     shadowColor: '#000',
@@ -613,9 +609,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 4,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   navButton: {
-    paddingHorizontal: 5,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
   },
   content: {
     flexGrow: 1,
@@ -641,7 +640,7 @@ const styles = StyleSheet.create({
   backText: {
     fontSize: 16,
     color: '#6B4E31',
-    fontWeight: 'bold',
+    fontWeight: '600',
     fontFamily: 'Roboto',
   },
   profileCard: {
@@ -655,31 +654,35 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: '90%',
     maxWidth: 400,
+    alignItems: 'center',
   },
   profileHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 15,
+    width: '100%',
   },
   profileTitle: {
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: 'bold',
     color: '#6B4E31',
-    fontFamily: 'Roboto',
     flex: 1,
+    fontFamily: 'Roboto',
     textAlign: 'center',
   },
   dogImage: {
-    width: 200,
-    height: 200,
-    borderRadius: 15,
+    width: 180,
+    height: 180,
+    borderRadius: 12,
     marginBottom: 15,
     alignSelf: 'center',
     borderWidth: 2,
     borderColor: '#FFD700',
   },
   dogDetails: {
-    marginBottom: 20,
+    marginBottom: 15,
+    flexDirection: 'column',
+    width: '100%',
   },
   dogInfo: {
     fontSize: 16,
@@ -691,18 +694,42 @@ const styles = StyleSheet.create({
   locationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    //marginBottom: 10,
   },
   input: {
     backgroundColor: '#F9F9F9',
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.1)',
-    borderRadius: 10,
+    borderRadius: 8,
     padding: 12,
-    marginBottom: 12,
+    marginBottom: 10,
     fontSize: 16,
     color: '#333',
+    width: '100%',
     fontFamily: 'Roboto',
+    shadowColor: '#ddd',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+    //textTransform: 'capitalize',
+  },
+  sizeInput: {
+    backgroundColor: '#F9F9F9',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 10,
+    fontSize: 16,
+    color: '#333',
+    width: '100%',
+    fontFamily: 'Roboto',
+    shadowColor: '#ddd',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+    textTransform: 'capitalize',
   },
   detailsInput: {
     height: 80,
@@ -715,13 +742,13 @@ const styles = StyleSheet.create({
   },
   genderButton: {
     flex: 1,
-    padding: 12,
-    borderWidth: 2,
-    borderColor: 'rgba(0, 0, 0, 0.1)',
-    borderRadius: 10,
+    paddingVertical: 12,
+    borderWidth: 1,
+    borderColor: '#FFF',
+    borderRadius: 8,
     alignItems: 'center',
     marginHorizontal: 5,
-    backgroundColor: '#F9F9F9',
+    backgroundColor: '#FFF',
     flexDirection: 'row',
     justifyContent: 'center',
     shadowColor: '#000',
@@ -732,13 +759,13 @@ const styles = StyleSheet.create({
   },
   genderButtonSelected: {
     borderColor: '#FFD700',
-    backgroundColor: '#FFF',
+    backgroundColor: '#FFF9F9',
   },
   genderIcon: {
     width: 20,
-    height: 24,
+    height: 20,
     tintColor: '#6B4E31',
-    marginRight: 6,
+    marginRight: 8,
   },
   genderText: {
     fontSize: 16,
@@ -746,42 +773,22 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
   },
   genderTextSelected: {
-    color: '#6B4E31',
     fontWeight: 'bold',
-  },
-  editButton: {
-    backgroundColor: '#FFF',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginBottom: 15,
-    borderWidth: 2,
-    borderColor: '#FFD700',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  editButtonText: {
-    fontSize: 16,
     color: '#6B4E31',
-    fontWeight: 'bold',
-    fontFamily: 'Roboto',
   },
   saveButton: {
     backgroundColor: '#FFD700',
     paddingVertical: 12,
     paddingHorizontal: 20,
-    borderRadius: 10,
+    borderRadius: 8,
     alignItems: 'center',
+    width: '100%',
     marginBottom: 15,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 3,
+    shadowRadius: 4,
+    elevation: 4,
   },
   saveButtonText: {
     fontSize: 16,
@@ -789,20 +796,23 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Roboto',
   },
-  reportButton: {
-    backgroundColor: '#FFD700',
+  editButton: {
+    backgroundColor: '#FFF',
+    borderWidth: 2,
+    borderColor: '#FFD700',
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
     alignItems: 'center',
-    marginBottom: 20,
+    width: '100%',
+    marginBottom: 15,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     elevation: 4,
   },
-  reportButtonText: {
+  editButtonText: {
     fontSize: 16,
     color: '#6B4E31',
     fontWeight: 'bold',
@@ -812,31 +822,34 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     width: '100%',
+    marginTop: 10,
   },
   yesButton: {
     backgroundColor: '#FFD700',
     paddingVertical: 12,
     paddingHorizontal: 30,
-    borderRadius: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginRight: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 3,
+    shadowRadius: 4,
+    elevation: 4,
   },
   noButton: {
     backgroundColor: '#FFF',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    borderRadius: 10,
-    marginLeft: 20,
     borderWidth: 2,
     borderColor: '#FFD700',
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 8,
+    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
+    shadowRadius: 4,
+    elevation: 4,
   },
   buttonText: {
     color: '#6B4E31',
@@ -850,10 +863,29 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Roboto',
   },
+  reportButton: {
+    backgroundColor: '#FFD700',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  reportButtonText: {
+    fontSize: 16,
+    color: '#6B4E31',
+    fontWeight: 'bold',
+    fontFamily: 'Roboto',
+  },
   placeholderText: {
     color: "#888", // Lighter color to show it's a placeholder
     fontStyle: "italic",
-  },
+  }
 });
-
 export default FoundDogFormConfirmation;

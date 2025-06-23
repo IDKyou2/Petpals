@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema({
   contact: { type: String, required: true },
   password: { type: String, required: true },
   profilePic: { type: String, default: "" },
-  banned: { type: Boolean, default: false },  
+  banned: { type: Boolean, default: false },
+  address: { type: String, required: true }, // newly added
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

@@ -16,9 +16,9 @@ router.get("/messages", async (req, res) => {
           ...msg._doc,
           profilePic: user
             ? user.profilePic
-              ? `/uploads/${path.basename(user.profilePic)}`
-              : "/uploads/default-user.png"
-            : "/uploads/default-user.png",
+              ? `/Uploads/pictures/${path.basename(user.profilePic)}`
+              : "/Uploads/default-user.png"
+            : "/Uploads/default-user.png",
         };
       })
     );
@@ -52,9 +52,9 @@ router.post("/messages", async (req, res) => {
           ...msg._doc,
           profilePic: user
             ? user.profilePic
-              ? `/uploads/${path.basename(user.profilePic)}`
-              : "/uploads/default-user.png"
-            : "/uploads/default-user.png",
+              ? `/Uploads/pictures/${path.basename(user.profilePic)}`
+              : "/Uploads/default-user.png"
+            : "/Uploads/default-user.png",
         };
       })
     );
@@ -84,9 +84,9 @@ router.get("/private-messages/:userFullName", async (req, res) => {
           ...msg._doc,
           profilePic: user
             ? user.profilePic
-              ? `/uploads/${path.basename(user.profilePic)}`
-              : "/uploads/default-user.png"
-            : "/uploads/default-user.png",
+              ? `/Uploads/pictures/${path.basename(user.profilePic)}`
+              : "/Uploads/default-user.png"
+            : "/Uploads/default-user.png",
         };
       })
     );
@@ -115,8 +115,8 @@ router.get("/users", async (req, res) => {
     const usersWithProfilePics = users.map((user) => ({
       fullName: user.fullName,
       profilePic: user.profilePic
-        ? `/uploads/${path.basename(user.profilePic)}`
-        : "/uploads/default-user.png",
+        ? `/Uploads/pictures/${path.basename(user.profilePic)}`
+        : "/Uploads/default-user.png",
     }));
     res.json(usersWithProfilePics);
   } catch (err) {

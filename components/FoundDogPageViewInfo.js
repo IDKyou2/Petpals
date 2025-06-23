@@ -13,7 +13,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Define API URL constants
-const BASE_URL = "http://192.168.1.24:5000";
+const BASE_URL = "http://192.168.1.6:5000";
 
 const FoundDogPageViewInfo = ({
   dog,
@@ -132,7 +132,6 @@ const FoundDogPageViewInfo = ({
           />
           <Text style={styles.mainTitle}>View Info</Text>
         </TouchableOpacity>
-
         <View style={styles.card}>
           <Image
             source={{ uri: `${BASE_URL}${dog.imagePath}` }}
@@ -140,77 +139,62 @@ const FoundDogPageViewInfo = ({
             resizeMode="cover"
           />
           <View style={styles.info}>
-            <View style={styles.petIdContainer}>
+            <View style={styles.containerRow}>
               <Text style={styles.petId}>Pet ID #: {dog.petId}</Text>
             </View>
-            <View style={styles.categoryContainer}>
+            <View style={styles.containerRow}>
               <Image
                 source={require("../assets/images/size.png")}
-                style={styles.icon}
+                style={styles.bullet}
               />
               <Text style={styles.label}>Category: {dog.category}</Text>
             </View>
-            <View style={styles.breedContainer}>
+            <View style={styles.containerRow}>
               <Image
                 source={require("../assets/images/size.png")}
-                style={styles.icon}
+                style={styles.bullet}
               />
-              <Text style={styles.name}>
-                <Text style={styles.label}>Breed: </Text>
-                {dog.breed}
-              </Text>
+              <Text style={styles.label}>Breed: {dog.breed}</Text>
             </View>
-            <View style={styles.genderContainer}>
+            <View style={styles.containerRow}>
               <Image
                 source={require("../assets/images/size.png")}
-                style={styles.icon}
+                style={styles.bullet}
               />
-              <Text style={styles.details}>
-                <Text style={styles.label}>Gender: </Text>
-                {dog.gender}
-              </Text>
+              <Text style={styles.label}>Gender: {dog.gender}</Text>
             </View>
-            <View style={styles.divider} />
-            <View style={styles.lastSeen}>
+            <View style={styles.containerRow}>
               <Image
                 source={require("../assets/images/size.png")}
-                style={styles.locationIcon}
+                style={styles.bullet}
               />
-              <Text style={styles.location}>
-                <Text style={styles.label}>Found at:{" "}</Text>
-                {dog.location}
-              </Text>
+              <Text style={styles.label}>Size: {dog.size}</Text>
             </View>
-            <View style={styles.sizeContainer}>
+            <View style={styles.containerRow}>
               <Image
                 source={require("../assets/images/size.png")}
-                style={styles.icon}
+                style={styles.bullet}
               />
-              <Text style={styles.size}>
-                <Text style={styles.label}>Size: </Text>
-                {dog.size}
-              </Text>
+              <Text style={styles.label}>Found at: {dog.location}</Text>
             </View>
-            <View style={styles.additionalDetailsContainer}>
+            <View style={styles.containerRow}>
               <Image
                 source={require("../assets/images/details.png")}
-                style={styles.icon}
+                style={styles.bullet}
               />
-              <Text style={styles.additionalDetails}>
-                <Text style={styles.label}>Additional details: </Text>
-                {dog.details}
-              </Text>
+              <Text style={styles.label}>Additional details: {dog.details}</Text>
             </View>
-            <View style={styles.postedBy}>
+            <View style={styles.divider} />
+            <View style={styles.userDetailsContainer}>
               <Image
                 source={require("../assets/images/size.png")}
-                style={styles.icon}
+                style={styles.bullet}
               />
               <Text style={styles.postedByText}>
                 {dog.userId && dog.userId.fullName ? (
                   <>
-                    <Text style={styles.label}>Posted by: </Text>
-                    {dog.userId.fullName}
+                    <Text style={styles.label}>Posted by: {dog.userId.fullName}</Text>
+
                   </>
                 ) : (
                   <Text style={styles.errorText}>
@@ -220,10 +204,10 @@ const FoundDogPageViewInfo = ({
               </Text>
             </View>
             {userData && userData.contact && (
-              <View style={styles.contactContainer}>
+              <View style={styles.userDetailsContainer}>
                 <Image
                   source={require("../assets/images/phone-number.png")}
-                  style={styles.icon}
+                  style={styles.bullet}
                 />
                 <Text style={styles.contact}>
                   <Text style={styles.label}>Contact #: </Text>
@@ -237,7 +221,6 @@ const FoundDogPageViewInfo = ({
     </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
   mainWrapper: {
     flex: 1,
@@ -339,7 +322,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 5,
     padding: 20,
-    marginTop: 20,
+    //marginTop: 20,
     alignItems: 'center',
     width: '100%',
     maxWidth: 400,
@@ -367,117 +350,61 @@ const styles = StyleSheet.create({
     color: '#6B4E31',
     fontFamily: 'Roboto',
   },
-  categoryContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  name: {
+  category: {
     fontSize: 15,
-    fontWeight: '600',
+    color: '#6B4E31',
+    fontFamily: 'Roboto',
+  },
+  breed: {
     color: '#6B4E31',
     fontFamily: 'Roboto',
     textTransform: 'capitalize',
-  },
-  breedContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  breed: {
-    fontSize: 15,
-    color: '#6B4E31',
-    fontFamily: 'Roboto',
-  },
-  genderContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  details: {
-    fontSize: 15,
-    color: '#6B4E31',
-    fontFamily: 'Roboto',
   },
   divider: {
     height: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
     marginVertical: 10,
   },
-  lastSeen: {
+  containerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 5,
   },
-  locationIcon: {
-    width: 10,
-    height: 10,
-    marginRight: 5,
-    tintColor: '#6B4E31',
-  },
-  location: {
-    fontSize: 15,
-    color: '#6B4E31',
-    fontFamily: 'Roboto',
-  },
-  sizeContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  size: {
-    fontSize: 16,
-    color: '#6B4E31',
-    fontFamily: 'Roboto',
-  },
-  contactContainer: {
+  userDetailsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   contact: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#6B4E31',
     fontFamily: 'Roboto',
   },
-  additionalDetailsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  additionalDetails: {
-    fontSize: 16,
-    color: '#6B4E31',
-    fontFamily: 'Roboto',
-  },
-  postedBy: {
+  /*
+  postedByContainer: {
     padding: 8,
     borderRadius: 10,
     marginLeft: -8,
     flexDirection: 'row',
     alignItems: 'center',
-    //backgroundColor: '#F9F9F9',
+    // backgroundColor: '#F9F9F9',
   },
-  icon: {
+  */
+  bullet: {
     width: 10,
     height: 10,
     marginRight: 5,
     tintColor: '#6B4E31',
   },
   label: {
+    fontSize: 15,
     fontWeight: '700',
-    color: '#6B4E31',
-    fontFamily: 'Roboto',
-  },
-  postedByText: {
-    fontSize: 16,
     color: '#6B4E31',
     fontFamily: 'Roboto',
   },
   errorText: {
     color: '#FF4D4D',
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: 'Roboto',
   },
 });
-
 export default FoundDogPageViewInfo;

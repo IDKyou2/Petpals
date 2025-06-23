@@ -19,7 +19,7 @@ const LoginPage = ({ onSignUpClick, onLoginSuccess, navigateToAdminDashBoard }) 
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const API_URL = "http://192.168.1.24:5000/api/login/login";
+  const API_URL = "http://192.168.1.6:5000/api/login/login";
 
   const handleLoginSubmit = async () => {
     console.log("User clicked login button.");
@@ -154,6 +154,7 @@ const LoginPage = ({ onSignUpClick, onLoginSuccess, navigateToAdminDashBoard }) 
               secureTextEntry={!passwordVisible}
               editable={!isLoading}
               placeholderTextColor="#6B4E31"
+              autoCapitalize="none"
             />
             <TouchableOpacity
               onPress={() => setPasswordVisible(!passwordVisible)}

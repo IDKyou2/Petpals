@@ -13,8 +13,8 @@ import {
 import axios from "axios";
 
 const { width } = Dimensions.get("window");
-const API_BASE_URL = "http://192.168.1.24:5000/api/"; // For API endpoints
-const STATIC_BASE_URL = "http://192.168.1.24:5000/"; // For static files (images)
+const API_BASE_URL = "http://192.168.1.6:5000/api/"; // For API endpoints
+const STATIC_BASE_URL = "http://192.168.1.6:5000/"; // For static files (images)
 
 const iconMap = {
   "default-user.png": require("../../assets/images/default-user.png"),
@@ -86,7 +86,6 @@ const AdminDashBoard = ({
         } else {
           console.error("Error fetching users:", usersResponse.error.response?.data);
         }
-
         if (!lostDogsResponse.error) {
           newDashboardData.missingDogs = lostDogsResponse.data.totalLostDogs || 0;
         } else {

@@ -46,9 +46,8 @@ const LostDogFormConfirmation = ({
   );
   const [image, setImage] = useState(formData?.image || null);
   const newChatsCount = useChatCount();
-
-  const NEW_POSTS_API_URL = "http://192.168.1.24:5000/api/posts/new-posts-count";
-  const LOST_DOG_API_URL = "http://192.168.1.24:5000/api/lostdog";
+  const NEW_POSTS_API_URL = "http://192.168.1.6:5000/api/posts/new-posts-count";
+  const LOST_DOG_API_URL = "http://192.168.1.6:5000/api/lostdog";
 
   useEffect(() => {
     const fetchNewPostsCount = async () => {
@@ -58,7 +57,6 @@ const LostDogFormConfirmation = ({
           console.error("No token found in AsyncStorage");
           return;
         }
-
         const response = await axios.get(NEW_POSTS_API_URL, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -72,50 +70,39 @@ const LostDogFormConfirmation = ({
         console.error("Error fetching new posts count:", error);
       }
     };
-
     fetchNewPostsCount();
   }, []);
-
   const toggleMenu = () => setMenuOpen(!menuOpen);
-
   const handleMessageClick = () => {
     console.log("Message clicked");
     if (onNavigateToChatForum) {
       onNavigateToChatForum();
     }
   };
-
   const handleNotificationClick = () => {
     setIsModalOpen(true);
   };
-
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
   const handleHomeClick = () => {
     onNavigateToHome?.();
     setMenuOpen(false);
   };
-
   const handleProfileClick = () => {
     onNavigateToProfile?.();
     setMenuOpen(false);
   };
-
   const handleLogoutClick = () => {
     onLogout?.();
     setMenuOpen(false);
   };
-
   const handleTabClick = (tab) => {
     console.log(`Tab clicked: ${tab}`);
   };
 
   const handleEditClick = () => setIsEditing(true);
-
   const handleSaveChanges = () => {
-
     const capitalizeFirstLetter = (string) => {
       if (!string) return "";
       return string.charAt(0).toUpperCase() + string.slice(1);
@@ -334,7 +321,7 @@ const LostDogFormConfirmation = ({
                 placeholderTextColor="#A9A9A9"
               />
             ) : (
-              <Text style={styles.dogInfo}>Name: {editName}</Text>
+              <Text style={styles.dogInfo}>Name:{" "}{editName}</Text>
             )}
             {isEditing ? (
               <View style={styles.genderContainer}>
@@ -507,7 +494,6 @@ const LostDogFormConfirmation = ({
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -685,15 +671,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     flexDirection: 'column',
     width: '100%',
-  },
-  dogName: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: '#6B4E31',
-    marginBottom: 10,
-    textAlign: 'center',
-    fontFamily: 'Roboto',
-    textTransform: 'capitalize',
   },
   dogInfo: {
     fontSize: 16,
@@ -899,5 +876,4 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   }
 });
-
 export default LostDogFormConfirmation;

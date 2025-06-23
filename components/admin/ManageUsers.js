@@ -2,12 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const API_BASE_URL = "http://192.168.1.24:5000/api/";
-
+const API_BASE_URL = "http://192.168.1.6:5000/api/";
 const ManageUsersScreen = ({ onNavigateToAdminDashBoard, onNavigateToProfileUser }) => {
     const [users, setUsers] = useState([]);
-
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -16,7 +13,7 @@ const ManageUsersScreen = ({ onNavigateToAdminDashBoard, onNavigateToProfileUser
                 if (response.data && Array.isArray(response.data)) {
                     const fetchedUsers = response.data.map(user => {
                         const normalizedProfilePic = user.profilePic ? user.profilePic.replace(/\\/g, '/') : null;
-                        const imageUrl = normalizedProfilePic ? `http://192.168.1.24:5000/${normalizedProfilePic}` : null;
+                        const imageUrl = normalizedProfilePic ? `http://192.168.1.6:5000/${normalizedProfilePic}` : null;
                         console.log(`User ${user._id} - Full Name: ${user.fullName}, Profile Pic Path: ${normalizedProfilePic}, Full URL: ${imageUrl}`);
                         return {
                             id: user._id,
@@ -30,6 +27,7 @@ const ManageUsersScreen = ({ onNavigateToAdminDashBoard, onNavigateToProfileUser
                                 : require('../../assets/images/default-user.png'),
                             originalImageUrl: imageUrl,
                             banned: user.banned, // Use the actual banned status from the API
+                            address: user.address, // newly added //
                         };
                     });
                     setUsers(fetchedUsers);
@@ -72,7 +70,6 @@ const ManageUsersScreen = ({ onNavigateToAdminDashBoard, onNavigateToProfileUser
                 Alert.alert("Error", "Authentication token not found. Please log in again.");
                 return;
             }
-
             const response = await axios.put(
                 `${API_BASE_URL}auth/user/${userId}/ban`,
                 {},
@@ -82,7 +79,6 @@ const ManageUsersScreen = ({ onNavigateToAdminDashBoard, onNavigateToProfileUser
                     },
                 }
             );
-
             if (response.status === 200) {
                 setUsers(prevUsers =>
                     prevUsers.map(user =>
@@ -141,6 +137,7 @@ const ManageUsersScreen = ({ onNavigateToAdminDashBoard, onNavigateToProfileUser
                                 <View style={styles.infoContainer}>
                                     <Text style={styles.nameText}>{user.fullName}</Text>
                                     <Text style={styles.categoryText}>Email: {user.email}</Text>
+                                    {/*<Text style={styles.categoryText}>Address: {user.address}</Text> */}
                                     <View style={styles.buttonContainer}>
                                         <TouchableOpacity
                                             style={styles.viewButton}

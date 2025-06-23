@@ -99,7 +99,7 @@ router.post("/founddog", async (req, res) => {
         filename
       );
 
-      console.log("Attempting to save image to piątek, 192.168.1.24:5000/api/founddog", fullPath);
+      console.log("Attempting to save image to piątek, 192.168.1.6:5000/api/founddog", fullPath);
       await file.mv(fullPath);
       console.log("Image successfully saved to:", fullPath);
     } else {

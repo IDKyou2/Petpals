@@ -27,12 +27,14 @@ const RegisterForm = ({ onLoginClick }) => {
   const [contact, setContact] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [address, setAddress] = useState(""); // new
+
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // For Android emulator use 103.106.67.162, for iOS simulator use 192.168.1.24
-  const API_URL = "http://192.168.1.24:5000/api/register/register";
+  // For Android emulator use 103.106.67.162, for iOS simulator use 192.168.1.6
+  const API_URL = "http://192.168.1.6:5000/api/register/register";
 
   const handleImageUpload = async () => {
     try {
@@ -72,7 +74,7 @@ const RegisterForm = ({ onLoginClick }) => {
 
     console.log("User clicked register now button.");
     if (password !== confirmPassword) {
-      setError("Passwords don't match!");
+      setError("Password and confirm password don't match.");
       setLoading(false);
       return;
     }
@@ -136,10 +138,11 @@ const RegisterForm = ({ onLoginClick }) => {
       formData.append("contact", contact);
       formData.append("password", password);
       formData.append("confirmPassword", confirmPassword);
+      formData.append("address", address);  // newly added
 
       // Log FormData contents for debugging
       for (let [key, value] of formData) {
-        //console.log(`FormData: ${key} =`, value);
+        console.log(`Form Data: ${key} =`, value);
       }
 
       const response = await axios.post(API_URL, formData, {
@@ -233,7 +236,14 @@ const RegisterForm = ({ onLoginClick }) => {
               keyboardType="phone-pad"
               maxLength={11}
             />
-
+            {/* ----------------------------------------------------------------- Newly added ----------------------------------------- */}
+            <TextInput
+              style={styles.input}
+              placeholder="Address"
+              value={address}
+              onChangeText={setAddress}
+            />
+            {/* ------------------------------------------------------------------------------------------------------------------------- */}
             <View style={styles.passwordContainer}>
               <TextInput
                 style={styles.inputWithIcon}
@@ -241,6 +251,7 @@ const RegisterForm = ({ onLoginClick }) => {
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={!passwordVisible}
+                autoCapitalize="none"
               />
               <TouchableOpacity
                 style={styles.passwordIcon}
@@ -264,6 +275,7 @@ const RegisterForm = ({ onLoginClick }) => {
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 secureTextEntry={!confirmPasswordVisible}
+                autoCapitalize="none"
               />
               <TouchableOpacity
                 style={styles.passwordIcon}
