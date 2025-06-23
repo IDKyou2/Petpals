@@ -5,6 +5,7 @@ const path = require("path");
 const fs = require("fs");
 const router = express.Router();
 
+
 router.post("/register", async (req, res) => {
   const {
     username,
@@ -87,6 +88,28 @@ router.post("/register", async (req, res) => {
     return res
       .status(500)
       .json({ message: "Internal server error. Please try again later." });
+  }
+});
+
+
+// -------------------------------- new -------------------------- //
+router.post("/check-username", async (req, res) => {
+  try {
+    const { username } = req.body;
+
+    if (!username) {
+      return res
+        .status(400)
+        .json({ exists: false, message: "Username required" });
+    }
+
+    const user = await User.findOne({ username: username.toLowerCase() });
+    res.status(200).json({ exists: !!user });
+  } catch (error) {
+    console.error("Username check error:", error);
+    res
+      .status(500)
+      .json({ message: "Server error checking username" });
   }
 });
 

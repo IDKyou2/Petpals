@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+//import React, { useState } from "react";
 import {
   View,
   Text,
@@ -15,23 +15,38 @@ import {
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
+import React, { useState, useEffect } from "react";
+
 
 const RegisterForm = ({ onLoginClick }) => {
   const navigation = useNavigation();
   const [profilePic, setProfilePic] = useState(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-  const [username, setUsername] = useState("");
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [contact, setContact] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [address, setAddress] = useState(""); // new
-
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const [username, setUsername] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  //const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+
+  const checkUsernameAvailability = async (username) => {
+    try {
+      const res = await axios.post("http://192.168.1.6:5000/api/register/check-username", { username });
+      return res.data.exists;
+    } catch (err) {
+      console.error("Username check failed:", err);
+      return false; // Assume available if error
+    }
+  };
 
   // For Android emulator use 103.106.67.162, for iOS simulator use 192.168.1.6
   const API_URL = "http://192.168.1.6:5000/api/register/register";
@@ -166,6 +181,34 @@ const RegisterForm = ({ onLoginClick }) => {
     }
   };
 
+  // --------------------------------------------- For username ---------------------------------- //
+  useEffect(() => {
+    if (username.trim().length === 0) {
+      setUsernameError("");
+      return;
+    } else {
+      setUsernameError(""); // Clear error if not empty
+    }
+
+    const checkUsername = async () => {
+      try {
+        const isTaken = await checkUsernameAvailability(username);
+        if (isTaken) {
+          setUsernameError("Username already taken.");
+        } else {
+          setUsernameError(""); // Clear error
+        }
+      } catch (error) {
+        console.log("Username check failed:", error);
+        setUsernameError("Error checking username.");
+      }
+    };
+
+    checkUsername(); // Call the async function
+
+  }, [username]);
+
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -202,6 +245,11 @@ const RegisterForm = ({ onLoginClick }) => {
           </TouchableOpacity>
 
           <View style={styles.registerForm}>
+            {usernameError ? (
+              <Text style={{ color: "red" }}>{usernameError}</Text>
+            ) : username.length > 0 ? (
+              <Text style={{ color: "green" }}>Username is available.</Text>
+            ) : null}
             <TextInput
               style={styles.input}
               placeholder="Username"
