@@ -87,7 +87,19 @@ const RegisterForm = ({ onLoginClick }) => {
     setSuccess(null);
     setLoading(true);
 
-    console.log("User clicked register now button.");
+    // console.log("User clicked register now button.");
+    if (process.env.NODE_ENV === "development") {
+      console.log("Username:", username);
+      console.log("Full name:", fullName);
+      console.log("Email:", email);
+      console.log("Contact no:", contact);
+      //console.log("Email: ", email.replace(/(.{2})(.*)(@.*)/, "$1***$3"));               // masked
+      //console.log("Contact no: ", contact.slice(0, 3) + "****" + contact.slice(-2));      // masked
+      console.log("Address:", address);
+      console.log("Password received.");
+    }
+
+
     if (password !== confirmPassword) {
       setError("Password and confirm password don't match.");
       setLoading(false);
@@ -247,7 +259,7 @@ const RegisterForm = ({ onLoginClick }) => {
           <View style={styles.registerForm}>
             {usernameError ? (
               <Text style={{ color: "red" }}>{usernameError}</Text>
-            ) : username.length > 0 ? (
+            ) : username.length >= 3 ? (
               <Text style={{ color: "green" }}>Username is available.</Text>
             ) : null}
             <TextInput

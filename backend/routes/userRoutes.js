@@ -26,20 +26,12 @@ const upload = multer({ storage: storage });
 // Registration route to enforce lowercase username
 router.post("/register", async (req, res) => {
   const { username, fullName, email, contact, password, address } = req.body;
+  const isValidUsername = /^[a-z0-9]+$/.test(username);  // Username validation
 
-  // Validate username: check for spaces or capital letters
-  if (/\s/.test(username) || /[A-Z]/.test(username)) {
+  if (!isValidUsername) {
     return res.status(400).json({
       message:
-        "Please make sure that the username will accept only small letters with or without numbers, and it has no space",
-    });
-  }
-
-  // Validate username: only lowercase letters and numbers
-  if (!/^[a-z0-9]+$/.test(username)) {
-    return res.status(400).json({
-      message:
-        "Please make sure that the username will accept only small letters with or without numbers, and it has no space",
+        "Username must contain only lowercase letters and numbers, with no spaces.",
     });
   }
 
